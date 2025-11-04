@@ -1,6 +1,6 @@
 cabal-version:      3.0
 name:               ghc-compat
-version:            0.3.0.0
+version:            0.4.0.0
                     -- NOTE: when changing the version number, also
                     -- update the version number in MicroCabal.
 synopsis:           GHC compatibility for MicroHs
@@ -31,7 +31,11 @@ library
         GHC.Conc.Sync
         GHC.Exts
         GHC.Foreign
+        GHC.Internal.Conc.Signal
+        GHC.Internal.IO.Device
+        GHC.IO
         GHC.IO.Buffer
+        GHC.IO.Encoding
         GHC.IO.Encoding.Failure
         GHC.IO.Encoding.UTF32
         GHC.IO.Encoding.UTF16
@@ -39,12 +43,14 @@ library
         GHC.IO.Encoding.Types
         GHC.IO.Encoding.Iconv
         GHC.IO.Encoding.UTF8
+        GHC.IO.Exception
         GHC.IO.String
-        GHC.IO.Encoding
         GHC.Stack
+        GHC.TopHandler
         GHC.Types
         Language.Haskell.TH.Quote
         Language.Haskell.TH.Syntax
+        System.Posix.Internals
     build-depends:    base >=4.4 && <6.9
     hs-source-dirs:   src
     default-language: Haskell2010
