@@ -19,6 +19,13 @@ module GHC.Exts(
   tagToEnum#, thawSmallArray#, unsafeCoerce#,
   unsafeFreezeSmallArray#, unsafeThawSmallArray#,
   writeSmallArray#, shrinkSmallMutableArray#,
+  --
+  IO,
+  pattern IO,
+  --
+  ThreadId(ThreadId),
+  fork#, forkOn#,
+  forkOS,
   ) where
 import qualified Control.Monad.ST_Type as ST
 
@@ -158,3 +165,42 @@ tagToEnum = (0 /=)
 
 unsafeCoerce# :: a -> b
 unsafeCoerce# = unsafeCoerce
+
+-------------------------------
+
+ioToState :: IO a -> State# RealWorld -> (# State# RealWorld, a #)
+ioToState st s = unsafePerformIO $ do a <- st; return (# s, a #)
+
+ioToStateUnit :: IO () -> State# RealWorld -> State# RealWorld
+ioToStateUnit st s = unsafePerformIO $ do st; return s
+
+stateToIO :: (State# RealWorld -> (# State# RealWorld, a #)) -> IO a
+stateToIO f =
+  case f StateToken of
+    (# _, a #) -> pure a
+
+pattern IO :: (State# RealWorld -> (# State# RealWorld, a #)) -> IO a
+pattern IO x <- (ioToState -> x)
+  where IO x = stateToIO x
+
+-------------------------------
+
+import Control.Concurrent(ThreadId, forkIO)
+
+type ThreadId# = ThreadId
+pattern ThreadId :: ThreadId# -> ThreadId
+pattern ThreadId a = a
+
+fork# :: (State# RealWorld -> (# State# RealWorld, a #))
+      -> State# RealWorld -> (# State# RealWorld, ThreadId# #)
+fork# sio = ioToState (forkIO (stateToIO sio >> pure ()))
+
+forkOn# :: Int#
+        -> (State# RealWorld -> (# State# RealWorld, a #))
+        -> State# RealWorld
+        -> (# State# RealWorld, ThreadId# #)
+forkOn# _ = fork#
+
+-- XXX Until mhs gets this
+forkOS :: IO () -> IO ThreadId
+forkOS = forkIO
