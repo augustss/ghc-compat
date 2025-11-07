@@ -1,15 +1,16 @@
 module GHC.Exts(
+  TYPE,
+  --
   build, augment,
   inline,
   --
   Int(I#), Int#, (==#), (<#),
+  isTrue#,
 --  pattern I#,
   --
-  unsafeIOToST, stToIO, RealWorld,
-  ST,
-  pattern ST,
+  ST, unsafeIOToST,
   --
-  State#,
+  State#, stToState, stateToST,
   -- array stuff
   SmallArray#, SmallMutableArray#,
   cloneSmallMutableArray#, copySmallArray#,
@@ -29,18 +30,17 @@ module GHC.Exts(
   ) where
 import qualified Control.Monad.ST_Type as ST
 
+data TYPE     -- this is nothing like TYPE in GHC, but allows imports to be unaltered
+
+-----
+
 build :: forall a. (forall b. (a -> b -> b) -> b -> b) -> [a]
 build g = g (:) []
 
 augment :: forall a. (forall b. (a->b->b) -> b -> b) -> [a] -> [a]
 augment g xs = g (:) xs
 
-----
-
-data RealWorld  -- Just to be compatible with GHC.  We don't use it.
-
-stToIO :: forall a . ST RealWorld a -> IO a
-stToIO = ST.unST
+-----
 
 unsafeIOToST :: IO a -> ST s a
 unsafeIOToST = ST.ST
@@ -79,10 +79,6 @@ stateToST :: (State# s -> (# State# s, a #)) -> ST s a
 stateToST f =
   case f StateToken of
     (# _, a #) -> pure a
-
-pattern ST :: (State# s -> (# State# s, a #)) -> ST s a
-pattern ST x <- (stToState -> x)
-  where ST x = stateToST x
 
 -------------------------------------
 

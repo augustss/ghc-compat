@@ -1,6 +1,6 @@
 cabal-version:      3.0
 name:               ghc-compat
-version:            0.4.0.0
+version:            0.5.0.0
                     -- NOTE: when changing the version number, also
                     -- update the version number in MicroCabal.
 synopsis:           GHC compatibility for MicroHs
@@ -46,6 +46,7 @@ library
         GHC.IO.Exception
         GHC.IO.String
         GHC.Stack
+        GHC.ST
         GHC.TopHandler
         GHC.Types
         Language.Haskell.TH.Quote
