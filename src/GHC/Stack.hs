@@ -54,7 +54,7 @@ data SrcLoc = SrcLoc
   , srcLocStartCol  :: Int
   , srcLocEndLine   :: Int
   , srcLocEndCol    :: Int
-  } deriving Eq
+  } deriving (Eq, Show)
 
 popCallStack :: CallStack -> CallStack
 popCallStack stk = case stk of
