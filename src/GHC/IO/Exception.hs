@@ -1,4 +1,4 @@
-module GHC.IO.Exception where
+module GHC.IO.Exception (IOErrorType(..), IOException(..), unsupportedOperation) where
 import System.IO.Error
 
 unsupportedOperation :: IOError
