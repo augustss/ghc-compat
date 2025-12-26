@@ -27,6 +27,8 @@ module GHC.Exts(
   ThreadId(ThreadId),
   fork#, forkOn#,
   forkOS,
+  --
+  SPEC(..)
   ) where
 import qualified Control.Monad.ST_Type as ST
 
@@ -200,3 +202,7 @@ forkOn# _ = fork#
 -- XXX Until mhs gets this
 forkOS :: IO () -> IO ThreadId
 forkOS = forkIO
+
+-------------------------------
+
+data SPEC = SPEC | SPEC2
