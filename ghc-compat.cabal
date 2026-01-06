@@ -1,8 +1,7 @@
 cabal-version:      3.0
 name:               ghc-compat
 version:            0.5.4.0
-                    -- NOTE: when changing the version number, also
-                    -- update the version number in MicroCabal.
+                    -- NOTE: README.md describes what a version number change entails
 synopsis:           GHC compatibility for MicroHs
 description:        This package contains a number of modules that are
                     part of base in GHC.  The modules do not really belong
