@@ -21,14 +21,19 @@ module GHC.Exts(
   unsafeFreezeSmallArray#, unsafeThawSmallArray#,
   writeSmallArray#, shrinkSmallMutableArray#,
   --
+  Array#, MutableArray#,
+  --
   IO,
   pattern IO,
   --
   ThreadId(ThreadId),
   fork#, forkOn#,
   forkOS,
+  --
+  SPEC(..),
   ) where
 import qualified Control.Monad.ST_Type as ST
+import GHC.Internal.Types
 
 data TYPE     -- this is nothing like TYPE in GHC, but allows imports to be unaltered
 
@@ -200,3 +205,9 @@ forkOn# _ = fork#
 -- XXX Until mhs gets this
 forkOS :: IO () -> IO ThreadId
 forkOS = forkIO
+
+-------------------------------
+
+data Array# a
+data MutableArray# s a
+
