@@ -29,6 +29,7 @@ library
         GHC.Conc
         GHC.Conc.Sync
         GHC.Exts
+        GHC.Fingerprint
         GHC.Foreign
         GHC.Internal.Conc.Signal
         GHC.Internal.IO.Device
