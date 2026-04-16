@@ -1,6 +1,6 @@
 cabal-version:      3.0
 name:               ghc-compat
-version:            0.5.5.0
+version:            0.5.6.0
                     -- NOTE: README.md describes what a version number change entails
 synopsis:           GHC compatibility for MicroHs
 description:        This package contains a number of modules that are
@@ -50,6 +50,7 @@ library
         GHC.Stack
         GHC.ST
         GHC.TopHandler
+        GHC.TypeLits
         GHC.Types
         GHC.Word
         Language.Haskell.TH.Quote

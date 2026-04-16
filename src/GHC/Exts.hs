@@ -31,9 +31,11 @@ module GHC.Exts(
   forkOS,
   --
   SPEC(..),
+  Proxy#, proxy#,
   ) where
 import qualified Control.Monad.ST_Type as ST
 import GHC.Internal.Types
+import Data.Proxy
 
 data TYPE     -- this is nothing like TYPE in GHC, but allows imports to be unaltered
 
@@ -211,3 +213,6 @@ forkOS = forkIO
 data Array# a
 data MutableArray# s a
 
+type Proxy# = Proxy
+proxy# :: Proxy# a
+proxy# = Proxy
