@@ -81,6 +81,7 @@ localeEncodingName = unsafePerformIO $ do
 -- value -1, which is a possible return value from iconv_open.
 type IConv = CLong -- ToDo: (#type iconv_t)
 
+{- No iconv for mhs yet
 foreign import ccall unsafe "hs_iconv_open"
     hs_iconv_open :: CString -> CString -> IO IConv
 
@@ -93,6 +94,15 @@ foreign import ccall unsafe "hs_iconv"
 
 foreign import ccall unsafe "localeEncoding"
     c_localeEncoding :: IO CString
+-}
+hs_iconv_open :: CString -> CString -> IO IConv
+hs_iconv_open = undefined
+hs_iconv_close :: IConv -> IO CInt
+hs_iconv_close = undefined
+hs_iconv :: IConv -> Ptr CString -> Ptr CSize -> Ptr CString -> Ptr CSize -> IO CSize
+hs_iconv = undefined
+c_localeEncoding :: IO CString
+c_localeEncoding = undefined
 
 haskellChar :: String
 #if defined(WORDS_BIGENDIAN)

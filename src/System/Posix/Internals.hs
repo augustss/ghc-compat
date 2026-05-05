@@ -436,16 +436,16 @@ foreign import ccall unsafe "unistd.h isatty"
 foreign import ccall unsafe "unistd.h unlink"
    c_unlink :: CString -> IO CInt
 
-foreign import capi unsafe "unistd.h utime"
+foreign import capi unsafe "unistd.h utime.h utime"
    c_utime :: CString -> Ptr CUtimbuf -> IO CInt
 
 foreign import ccall unsafe "unistd.h getpid"
    c_getpid :: IO CPid
 
-foreign import ccall unsafe "unistd.h __hscore_stat"
+foreign import ccall unsafe "unistd.h stat"
    c_stat :: CFilePath -> Ptr CStat -> IO CInt
 
-foreign import ccall unsafe "unistd.h __hscore_ftruncate"
+foreign import ccall unsafe "unistd.h ftruncate"
    c_ftruncate :: CInt -> COff -> IO CInt
 
 foreign import capi unsafe "unistd.h fcntl"
@@ -467,10 +467,10 @@ foreign import ccall unsafe "unistd.h link"
 foreign import capi unsafe "unistd.h mkfifo"
    c_mkfifo :: CString -> CMode -> IO CInt
 
-foreign import capi unsafe "signal.h sigemptyset"
+foreign import capi unsafe "signal.h value sigemptyset((sigset_t*)$1)"
    c_sigemptyset :: Ptr CSigset -> IO CInt
 
-foreign import capi unsafe "signal.h sigaddset"
+foreign import capi unsafe "signal.h value sigaddset((sigset_t*)$1, $2)"
    c_sigaddset :: Ptr CSigset -> CInt -> IO CInt
 
 foreign import capi unsafe "signal.h sigprocmask"
@@ -488,18 +488,18 @@ foreign import ccall unsafe "unistd.h waitpid"
    c_waitpid :: CPid -> Ptr CInt -> CInt -> IO CPid
 
 -- POSIX flags only:
-foreign import ccall unsafe "unistd.h O_RDONLY" o_RDONLY :: CInt
-foreign import ccall unsafe "unistd.h O_WRONLY" o_WRONLY :: CInt
-foreign import ccall unsafe "unistd.h O_RDWR"   o_RDWR   :: CInt
-foreign import ccall unsafe "unistd.h O_APPEND" o_APPEND :: CInt
-foreign import ccall unsafe "unistd.h O_CREAT"  o_CREAT  :: CInt
-foreign import ccall unsafe "unistd.h O_EXCL"   o_EXCL   :: CInt
-foreign import ccall unsafe "unistd.h O_TRUNC"  o_TRUNC  :: CInt
+foreign import ccall unsafe "unistd.h value O_RDONLY" o_RDONLY :: CInt
+foreign import ccall unsafe "unistd.h value O_WRONLY" o_WRONLY :: CInt
+foreign import ccall unsafe "unistd.h value O_RDWR"   o_RDWR   :: CInt
+foreign import ccall unsafe "unistd.h value O_APPEND" o_APPEND :: CInt
+foreign import ccall unsafe "unistd.h value O_CREAT"  o_CREAT  :: CInt
+foreign import ccall unsafe "unistd.h value O_EXCL"   o_EXCL   :: CInt
+foreign import ccall unsafe "unistd.h value O_TRUNC"  o_TRUNC  :: CInt
 
 -- non-POSIX flags.
-foreign import ccall unsafe "unistd.h O_NOCTTY"   o_NOCTTY   :: CInt
-foreign import ccall unsafe "unistd.h O_NONBLOCK" o_NONBLOCK :: CInt
-foreign import ccall unsafe "unistd.h O_BINARY"   o_BINARY   :: CInt
+foreign import ccall unsafe "unistd.h value O_NOCTTY"   o_NOCTTY   :: CInt
+foreign import ccall unsafe "unistd.h value O_NONBLOCK" o_NONBLOCK :: CInt
+--foreign import ccall unsafe "unistd.h fcntl.h value O_BINARY"   o_BINARY   :: CInt
 
 foreign import capi unsafe "sys/stat.h S_ISREG"  c_s_isreg  :: CMode -> CInt
 foreign import capi unsafe "sys/stat.h S_ISCHR"  c_s_ischr  :: CMode -> CInt
@@ -518,38 +518,39 @@ s_isdir cm = c_s_isdir cm /= 0
 s_isfifo :: CMode -> Bool
 s_isfifo cm = c_s_isfifo cm /= 0
 
-foreign import ccall unsafe "unistd.h __hscore_sizeof_stat" sizeof_stat :: Int
-foreign import ccall unsafe "unistd.h __hscore_st_mtime" st_mtime :: Ptr CStat -> IO CTime
-foreign import ccall unsafe "unistd.h __hscore_st_size" st_size :: Ptr CStat -> IO COff
-foreign import ccall unsafe "unistd.h __hscore_st_mode" st_mode :: Ptr CStat -> IO CMode
-foreign import ccall unsafe "unistd.h __hscore_st_dev" st_dev :: Ptr CStat -> IO CDev
-foreign import ccall unsafe "unistd.h __hscore_st_ino" st_ino :: Ptr CStat -> IO CIno
+foreign import capi  unsafe "unistd.h value sizeof(struct stat)" sizeof_stat :: Int
 
-foreign import ccall unsafe "unistd.h __hscore_echo"         const_echo :: CInt
-foreign import ccall unsafe "unistd.h __hscore_tcsanow"      const_tcsanow :: CInt
-foreign import ccall unsafe "unistd.h __hscore_icanon"       const_icanon :: CInt
-foreign import ccall unsafe "unistd.h __hscore_vmin"         const_vmin   :: CInt
-foreign import ccall unsafe "unistd.h __hscore_vtime"        const_vtime  :: CInt
-foreign import ccall unsafe "unistd.h __hscore_sigttou"      const_sigttou :: CInt
-foreign import ccall unsafe "unistd.h __hscore_sig_block"    const_sig_block :: CInt
-foreign import ccall unsafe "unistd.h __hscore_sig_setmask"  const_sig_setmask :: CInt
-foreign import ccall unsafe "unistd.h __hscore_f_getfl"      const_f_getfl :: CInt
-foreign import ccall unsafe "unistd.h __hscore_f_setfl"      const_f_setfl :: CInt
-foreign import ccall unsafe "unistd.h __hscore_f_setfd"      const_f_setfd :: CInt
-foreign import ccall unsafe "unistd.h __hscore_fd_cloexec"   const_fd_cloexec :: CLong
+foreign import ccall unsafe "unistd.h value ((struct stat*)$1)->st_mtime" st_mtime :: Ptr CStat -> IO CTime
+foreign import ccall unsafe "unistd.h value ((struct stat*)$1)->st_size" st_size :: Ptr CStat -> IO COff
+foreign import ccall unsafe "unistd.h value ((struct stat*)$1)->st_mode" st_mode :: Ptr CStat -> IO CMode
+foreign import ccall unsafe "unistd.h value ((struct stat*)$1)->st_dev" st_dev :: Ptr CStat -> IO CDev
+foreign import ccall unsafe "unistd.h value ((struct stat*)$1)->st_ino" st_ino :: Ptr CStat -> IO CIno
 
-foreign import ccall unsafe "unistd.h __hscore_sizeof_termios"  sizeof_termios :: Int
-foreign import ccall unsafe "unistd.h __hscore_sizeof_sigset_t" sizeof_sigset_t :: Int
+foreign import ccall unsafe "unistd.h value ECHO"         const_echo :: CInt
+foreign import ccall unsafe "unistd.h value TCSANOW"      const_tcsanow :: CInt
+foreign import ccall unsafe "unistd.h value ICANON"       const_icanon :: CInt
+foreign import ccall unsafe "unistd.h value VMIN"         const_vmin   :: CInt
+foreign import ccall unsafe "unistd.h value VTIME"        const_vtime  :: CInt
+foreign import ccall unsafe "unistd.h value SIGTTOU"      const_sigttou :: CInt
+foreign import ccall unsafe "unistd.h value SIG_BLOCK"    const_sig_block :: CInt
+foreign import ccall unsafe "unistd.h value SIG_SETMASK"  const_sig_setmask :: CInt
+foreign import ccall unsafe "unistd.h value F_GETFL"      const_f_getfl :: CInt
+foreign import ccall unsafe "unistd.h value F_SETFL"      const_f_setfl :: CInt
+foreign import ccall unsafe "unistd.h value F_SETFD"      const_f_setfd :: CInt
+foreign import ccall unsafe "unistd.h value FD_CLOEXEC"   const_fd_cloexec :: CLong
 
-foreign import ccall unsafe "unistd.h __hscore_lflag" c_lflag :: Ptr CTermios -> IO CTcflag
-foreign import ccall unsafe "unistd.h __hscore_poke_lflag" poke_c_lflag :: Ptr CTermios -> CTcflag -> IO ()
-foreign import ccall unsafe "unistd.h __hscore_ptr_c_cc" ptr_c_cc  :: Ptr CTermios -> IO (Ptr Word8)
+foreign import capi  unsafe "unistd.h value sizeof(struct termios)"  sizeof_termios :: Int
+foreign import capi  unsafe "unistd.h value sizeof(sigset_t)" sizeof_sigset_t :: Int
+
+foreign import ccall unsafe "unistd.h termios.h value ((struct termios*)$1)->c_lflag" c_lflag :: Ptr CTermios -> IO CTcflag
+foreign import ccall unsafe "unistd.h termios.h value ((struct termios*)$1)->c_lflag = $2" poke_c_lflag :: Ptr CTermios -> CTcflag -> IO ()
+foreign import ccall unsafe "unistd.h value &((struct termios*)$1)->c_cc" ptr_c_cc  :: Ptr CTermios -> IO (Ptr Word8)
 
 s_issock :: CMode -> Bool
 s_issock cmode = c_s_issock cmode /= 0
 foreign import capi unsafe "sys/stat.h S_ISSOCK" c_s_issock :: CMode -> CInt
 
-foreign import ccall unsafe "__hscore_bufsiz"  dEFAULT_BUFFER_SIZE :: Int
+foreign import capi  unsafe "stdio.h value BUFSIZ"  dEFAULT_BUFFER_SIZE :: Int
 foreign import capi  unsafe "stdio.h value SEEK_CUR" sEEK_CUR :: CInt
 foreign import capi  unsafe "stdio.h value SEEK_SET" sEEK_SET :: CInt
 foreign import capi  unsafe "stdio.h value SEEK_END" sEEK_END :: CInt
